@@ -59,22 +59,22 @@ export const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f7f9fc] px-4 sm:px-6 md:px-8">
-      <div className="bg-white shadow-lg rounded-2xl w-full max-w-md p-6 sm:p-8 transition-all">
+    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4 py-10">
+      <div className="card w-full max-w-md shadow-xl bg-base-100 p-6 sm:p-8 transition-all">
         {/* Step 1: Email */}
         {step === 1 && (
           <div className="text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center justify-center gap-2 mb-2">
-              <Mail className="text-indigo-600 w-6 h-6 sm:w-7 sm:h-7" /> Forgot Password
+            <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2 text-base-content">
+              <Mail className="text-primary w-6 h-6" /> Forgot Password
             </h2>
-            <p className="text-gray-500 text-sm sm:text-base mb-6">
+            <p className="text-base-content/60 mb-6">
               Enter your email to receive a verification code.
             </p>
 
             <input
               type="email"
               placeholder="Enter your registered email"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none mb-4 text-sm sm:text-base"
+              className="input input-bordered w-full mb-4"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -82,15 +82,13 @@ export const ForgotPassword = () => {
             <button
               onClick={handleEmailSubmit}
               disabled={!email || loading}
-              className={`w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white transition-colors text-sm sm:text-base ${
-                email && !loading
-                  ? "bg-indigo-500 hover:bg-indigo-600"
-                  : "bg-indigo-300 cursor-not-allowed"
+              className={`btn btn-primary w-full ${
+                !email || loading ? "btn-disabled" : ""
               }`}
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> Sending...
+                  <Loader2 className="w-5 h-5 animate-spin" /> Sending...
                 </>
               ) : (
                 <>
@@ -104,10 +102,10 @@ export const ForgotPassword = () => {
         {/* Step 2: OTP */}
         {step === 2 && (
           <div className="text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center justify-center gap-2 mb-2">
-              <KeyRound className="text-indigo-600 w-6 h-6 sm:w-7 sm:h-7" /> Verify OTP
+            <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2 text-base-content">
+              <KeyRound className="text-primary w-6 h-6" /> Verify OTP
             </h2>
-            <p className="text-gray-500 text-sm sm:text-base mb-6">
+            <p className="text-base-content/60 mb-6">
               Enter the 6-digit code sent to your email.
             </p>
 
@@ -115,7 +113,7 @@ export const ForgotPassword = () => {
               type="text"
               placeholder="Enter OTP"
               maxLength="6"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none mb-4 text-center tracking-widest text-lg sm:text-xl"
+              className="input input-bordered w-full mb-4 text-center tracking-widest text-lg"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
@@ -124,22 +122,20 @@ export const ForgotPassword = () => {
               <button
                 onClick={prevStep}
                 disabled={loading}
-                className="w-full sm:w-1/2 py-3 rounded-lg font-semibold bg-gray-200 hover:bg-gray-300 transition-colors text-sm sm:text-base disabled:opacity-70"
+                className="btn w-full sm:w-1/2 btn-ghost"
               >
                 Back
               </button>
               <button
                 onClick={handleOtpSubmit}
                 disabled={otp.length !== 6 || loading}
-                className={`flex items-center justify-center gap-2 w-full sm:w-1/2 py-3 rounded-lg font-semibold text-white transition-colors text-sm sm:text-base ${
-                  otp.length === 6 && !loading
-                    ? "bg-indigo-500 hover:bg-indigo-600"
-                    : "bg-indigo-300 cursor-not-allowed"
+                className={`btn w-full sm:w-1/2 btn-primary ${
+                  otp.length !== 6 || loading ? "btn-disabled" : ""
                 }`}
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" /> Verifying...
+                    <Loader2 className="w-5 h-5 animate-spin" /> Verifying...
                   </>
                 ) : (
                   "Next"
@@ -152,17 +148,17 @@ export const ForgotPassword = () => {
         {/* Step 3: Reset Password */}
         {step === 3 && (
           <div className="text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center justify-center gap-2 mb-2">
-              <Lock className="text-indigo-600 w-6 h-6 sm:w-7 sm:h-7" /> Reset Password
+            <h2 className="text-2xl font-bold flex items-center justify-center gap-2 mb-2 text-base-content">
+              <Lock className="text-primary w-6 h-6" /> Reset Password
             </h2>
-            <p className="text-gray-500 text-sm sm:text-base mb-6">
+            <p className="text-base-content/60 mb-6">
               Create a new, strong password.
             </p>
 
             <input
               type="password"
               placeholder="Enter new password"
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:outline-none mb-4 text-sm sm:text-base"
+              className="input input-bordered w-full mb-4"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -171,22 +167,20 @@ export const ForgotPassword = () => {
               <button
                 onClick={prevStep}
                 disabled={loading}
-                className="w-full sm:w-1/2 py-3 rounded-lg font-semibold bg-gray-200 hover:bg-gray-300 transition-colors text-sm sm:text-base disabled:opacity-70"
+                className="btn w-full sm:w-1/2 btn-ghost"
               >
                 Back
               </button>
               <button
                 onClick={handlePasswordChange}
                 disabled={password.length < 8 || loading}
-                className={`flex items-center justify-center gap-2 w-full sm:w-1/2 py-3 rounded-lg font-semibold text-white transition-colors text-sm sm:text-base ${
-                  password.length >= 6 && !loading
-                    ? "bg-indigo-500 hover:bg-indigo-600"
-                    : "bg-indigo-300 cursor-not-allowed"
+                className={`btn w-full sm:w-1/2 btn-primary ${
+                  password.length < 8 || loading ? "btn-disabled" : ""
                 }`}
               >
                 {loading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin" /> Resetting...
+                    <Loader2 className="w-5 h-5 animate-spin" /> Resetting...
                   </>
                 ) : (
                   "Reset"
@@ -195,7 +189,7 @@ export const ForgotPassword = () => {
             </div>
 
             {password && password.length < 8 && (
-              <p className="text-xs sm:text-sm text-red-500 mt-2">
+              <p className="text-xs text-red-500 mt-2">
                 Password must be at least 8 characters.
               </p>
             )}
@@ -208,7 +202,7 @@ export const ForgotPassword = () => {
             <div
               key={i}
               className={`h-2 w-2 sm:h-3 sm:w-3 rounded-full ${
-                step === i ? "bg-indigo-600" : "bg-gray-300"
+                step === i ? "bg-primary" : "bg-base-300"
               }`}
             ></div>
           ))}
