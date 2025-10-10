@@ -1,26 +1,28 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GraduationCap, Loader2 } from "lucide-react";
 import { LoginController } from "../controllers/Auth.js";
 import { toast } from "react-toastify";
 import { ForgotPassword } from "../components/ForgetPassword.jsx";
 import Cookies from "js-cookie";
+import { UserContext } from "../context/UserContext.js";
 
 export default function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const { setIsAuthenticated, setUserValue } = useContext(UserContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const res = await LoginController(formData);
-      Cookies.set("JwtToken", res.JwtToken);
+      localStorage.setItem("JwtToken", res.JwtToken);
+      setIsAuthenticated(true);
+      setUserValue(res.userData);
       toast.success(res.message);
       navigate("/");
-      window.location.reload();
     } catch (error) {
       toast.error(error.message || "Something went wrong!");
       console.error(error.message);
@@ -79,13 +81,13 @@ export default function Login() {
                 required
               />
             </div>
-                <button
-                  type="button"
-                  onClick={() => setShowForgotPassword(true)}
-                  className="text-l text-primary hover:underline text-right w-full"
-                >
-                  Forgot password?
-                </button>
+            <button
+              type="button"
+              onClick={() => setShowForgotPassword(true)}
+              className="text-l text-primary hover:underline text-right w-full"
+            >
+              Forgot password?
+            </button>
             {/* Submit Button */}
             <div className="mt-6">
               <button
