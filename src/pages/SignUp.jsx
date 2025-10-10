@@ -5,9 +5,7 @@ import { Register } from "../controllers/Auth.js";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext.js";
 import Cookies from "js-cookie";
-
 export default function SignUp() {
-  const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
@@ -17,7 +15,8 @@ export default function SignUp() {
     gender: "",
   });
   const [loading, setLoading] = useState(false);
-  const { setUserValue } = useContext(UserContext);
+  const { setUserValue, setIsAuthenticated } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -33,11 +32,10 @@ export default function SignUp() {
     setLoading(true);
     try {
       const res = await Register(formData);
-      Cookies.set("JwtToken", res.JwtToken);
+      localStorage.setItem("JwtToken", res.JwtToken);
+      setIsAuthenticated(true);
       setUserValue(res.userData);
-      toast.success(res.message);
-      navigate("/");
-      window.location.reload();
+      navigate('/');
     } catch (err) {
       toast.error(err.message || "Something went wrong!");
     } finally {

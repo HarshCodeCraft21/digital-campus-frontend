@@ -1,6 +1,5 @@
-import { useState } from "react";
-import Cookies from "js-cookie";
-import { Link } from "react-router-dom";
+import { useState,useContext } from "react";
+import { Link , useNavigate} from "react-router-dom";
 import {
   Phone,
   Mail,
@@ -9,15 +8,17 @@ import {
   MessageSquare,
   BookOpen,
 } from "lucide-react";
-
+import {UserContext} from '../context/UserContext.js';
 const Profile = () => {
   const [open, setOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const {userValue,setIsAuthenticated} = useContext(UserContext);
   const handleLogout = () => {
-    Cookies.remove("JwtToken");
-    window.location.reload();
+    localStorage.removeItem("JwtToken");
+    setIsAuthenticated(false);
+    navigate('/');
   };
-
+  console.log(userValue)
   return (
     <div className="min-h-screen bg-base-200 flex flex-col items-center py-8 px-4">
       {/* Cover Section */}

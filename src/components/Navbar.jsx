@@ -1,6 +1,7 @@
-import { useEffect, useState, useCallback, memo } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { GraduationCap, Menu, X, Search, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext.js";
 
 const navLinks = [
   { id: 1, label: "Home", path: "/" },
@@ -23,35 +24,59 @@ const SearchInput = ({ placeholder = "Search Courses..." }) => (
   </div>
 );
 
-// 🔹 Reusable Auth Buttons
-const AuthButtons = memo(({ hasToken }) => (
-  hasToken ? (
+const AuthButtons = ({ isAuthenticated, closeMenu }) => (
+  isAuthenticated ? (
     <div className="avatar">
       <div className="ring-blue-500 ring-offset-base-100 w-8 rounded-full ring-1 ring-offset-3">
-        <Link to='/profile' className="flex justify-center items-center">
-          <img src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp" title="profile" />
+        <Link to="/profile" onClick={closeMenu} className="flex justify-center items-center">
+          <img
+            src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp"
+            title="profile"
+            alt="profile"
+          />
         </Link>
       </div>
     </div>
   ) : (
     <>
-      <Link to="/login" className="btn btn-sm md:btn-md btn-outline rounded-xl">
+      <Link
+        to="/login"
+        className="btn btn-sm md:btn-md btn-outline rounded-xl"
+        onClick={closeMenu}
+      >
         Login
       </Link>
       <Link
         to="/signup"
         className="btn btn-sm md:btn-md bg-blue-500 rounded-xl hover:bg-blue-600 text-white"
+        onClick={closeMenu}
       >
         Sign Up
       </Link>
     </>
   )
-));
+);
 
-export const Navbar = memo(({ token }) => {
+export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const toggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
   const [role, setRole] = useState("student");
+  const menuRef = useRef();
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+  const { isAuthenticated } = useContext(UserContext);
   return (
     <nav className="navbar px-4 py-4 shadow-md flex items-center justify-between bg-base-100 relative">
 
@@ -80,27 +105,30 @@ export const Navbar = memo(({ token }) => {
 
       {/* Auth Buttons (Desktop) */}
       <div className="hidden md:flex items-center gap-2">
-        {
-          role === "teacher" ? (
-            <button className="btn bg-blue-500 text-white rounded-xl">Create Course <span><Plus /></span></button>
-          ) : ""
-        }
-        <AuthButtons hasToken={token} />
+        {role === "teacher" && (
+          <button className="btn bg-blue-500 text-white rounded-xl">
+            Create Course <Plus />
+          </button>
+        )}
+        <AuthButtons isAuthenticated={isAuthenticated} closeMenu={closeMenu} />
       </div>
 
       {/* Mobile Menu Button */}
-      <button className="md:hidden" onClick={toggleMenu}>
+      <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
         {menuOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
 
       {/* Mobile Dropdown */}
       {menuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-base-100 shadow-md p-4 flex flex-col gap-4 z-50 md:hidden">
+        <div
+          ref={menuRef}
+          className="absolute top-16 left-0 w-full bg-base-100 shadow-md p-4 flex flex-col gap-4 z-50 md:hidden"
+        >
           {navLinks.map(({ id, label, path }) => (
             <Link
               key={id}
               to={path}
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="hover:text-primary transition"
             >
               {label}
@@ -110,15 +138,15 @@ export const Navbar = memo(({ token }) => {
           <SearchInput />
 
           <div className="flex gap-4 mt-2">
-            {
-              role === "teacher" ? (
-                <button className="btn bg-blue-500 text-white rounded-xl">Create Course <span><Plus /></span></button>
-              ) : ""
-            }
-            <AuthButtons hasToken={token} />
+            {role === "teacher" && (
+              <button className="btn bg-blue-500 text-white rounded-xl">
+                Create Course <Plus />
+              </button>
+            )}
+            <AuthButtons isAuthenticated={isAuthenticated} closeMenu={closeMenu} />
           </div>
         </div>
       )}
     </nav>
   );
-});
+};

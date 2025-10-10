@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Send } from 'lucide-react';
-import { GetToken } from '../controllers/getToken.js';
 
 export default function Teach() {
     const [formData, setFormData] = useState({
