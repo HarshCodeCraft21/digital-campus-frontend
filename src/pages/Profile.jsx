@@ -90,7 +90,6 @@ const Profile = () => {
 
         <div className="divider" />
 
-        {/* Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           {/* Contact Info */}
           <div className="card bg-base-100 border border-base-300 shadow-sm hover:shadow-lg transition-all p-5">
