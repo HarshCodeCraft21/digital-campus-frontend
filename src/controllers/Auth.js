@@ -1,35 +1,42 @@
 import axios from "axios";
 import { loginAPI, registerAPI, updateProfile } from "../API/api.js";
 export const Register = async (user) => {
-    try {
-        const res = await axios.post(registerAPI, user, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-            withCredentials: true
-        });
-        return res.data;
-    } catch (error) {
-        console.log('Register Failed: ', error.message);
-    }
+  try {
+    const res = await axios.post(registerAPI, user, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true
+    });
+    return res.data;
+  } catch (error) {
+    console.log('Register Failed: ', error.message);
+  }
 }
 
 export const LoginController = async (user) => {
-    try {
-        const res = await axios.post(loginAPI, user, {
-            withCredentials: true
-        })
-        return res.data;
-    } catch (error) {
-        console.log('Register Failed: ', error.message);
-    }
+  try {
+    const res = await axios.post(loginAPI, user, {
+      withCredentials: true
+    })
+    return res.data;
+  } catch (error) {
+    console.log('Register Failed: ', error.message);
+  }
 }
 
 export const ProfileUpdate = async (formData) => {
+  const token = localStorage.getItem("JwtToken");
+  if (!token) {
+    console.log("token is missing...")
+  }
   try {
-    // ✅ Important: don't set Content-Type manually
     const res = await axios.put(updateProfile, formData, {
-      withCredentials: true, // include cookies if your API uses auth sessions
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      },
+      withCredentials: true,
     });
 
     if (!res?.data?.user) {
