@@ -8,7 +8,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { UserContext } from "../context/UserContext.js";
-import Banner from '../assets/Banner.png'
+import Banner from '../assets/Banner.png';
 const Profile = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
