@@ -5,3 +5,4 @@ export const loginAPI = `${URL}/api/users/login`;
 export const sendOTP = `${URL}/api/users/sendOtpForReset`;
 export const verifyOTP = `${URL}/api/users/verifyOtp`;
 export const resetPassword = `${URL}/api/users/reset-password`;
+export const updateProfile = `${URL}/api/users/userUpdate`;
