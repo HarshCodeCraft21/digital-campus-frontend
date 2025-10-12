@@ -67,6 +67,7 @@ export default function UpdateProfile() {
 
       toast.success("Profile updated successfully!");
       navigate("/");
+      window.location.reload();
     } catch (err) {
       console.error(err);
       toast.error(err?.message || "Something went wrong!");

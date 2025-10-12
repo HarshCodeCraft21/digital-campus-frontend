@@ -30,7 +30,7 @@ const AuthButtons = ({ isAuthenticated, closeMenu, userValue }) => (
       <div className="ring-blue-500 ring-offset-base-100 w-8 rounded-full ring-1 ring-offset-3">
         <Link to="/profile" onClick={closeMenu} className="flex justify-center items-center">
           <img
-            src={userValue ? userValue.profileUrl : "https://img.daisyui.com/images/profile/demo/spiderperson@192.webp"}
+            src={userValue?.profileUrl}
             title="profile"
             alt="profile"
           />

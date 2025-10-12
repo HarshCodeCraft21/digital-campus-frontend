@@ -8,7 +8,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { UserContext } from "../context/UserContext.js";
-
+import Banner from '../assets/Banner.png'
 const Profile = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const Profile = () => {
       {/* Cover Section */}
       <div className="relative w-full max-w-6xl rounded-2xl shadow-xl">
         <img
-          src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80"
+          src={Banner}
           alt="Cover"
           className="w-full h-48 sm:h-64 md:h-72 object-cover"
         />
