@@ -5,9 +5,8 @@ import { Register } from "../controllers/Auth.js";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext.js";
 
-export default function SignUp() {
+export default function UpdateProfile() {
   const [imagePreview, setImagePreview] = useState("");
-  const [imageFile, setImageFile] = useState(null); // 🆕 actual image file
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -19,40 +18,20 @@ export default function SignUp() {
   const { setUserValue, setIsAuthenticated } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // 📸 Handle image selection
   const handleImageUpload = (e) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file); // 🆕 store actual file for backend
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
-  // 📨 Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      // 🧠 Create FormData (for sending file + text together)
-      const formDataToSend = new FormData();
-      formDataToSend.append("fullName", formData.fullName);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("password", formData.password);
-      formDataToSend.append("age", formData.age);
-      formDataToSend.append("gender", formData.gender);
-      if (imageFile) formDataToSend.append("profileUrl", imageFile); // 🆕 match backend key
-
-      // 🧭 Send to backend
-      const res = await Register(formDataToSend); // your Register handles multipart/form-data
-
-      // 🔐 Save & navigate
-      localStorage.setItem("JwtToken", res.JwtToken);
-      setIsAuthenticated(true);
-      setUserValue(res.userData);
-      navigate("/");
+      //code
     } catch (err) {
       toast.error(err.message || "Something went wrong!");
     } finally {
@@ -69,10 +48,10 @@ export default function SignUp() {
               <GraduationCap className="h-8 w-8 text-primary" />
             </div>
             <h2 className="text-3xl font-bold text-base-content mt-3">
-              Create Account
+              Update Profile
             </h2>
             <p className="text-base-content/60">
-              Join Digital Campus and start your learning journey
+              One Campus Infinite Learning
             </p>
           </div>
 
@@ -194,28 +173,18 @@ export default function SignUp() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`btn btn-primary w-full ${loading ? "btn-disabled" : ""}`}
+                className={`btn btn-primary w-full font-bold ${loading ? "btn-disabled" : ""}`}
               >
                 {loading ? (
                   <>
                     <Loader2 className="animate-spin w-5 h-5" />
-                    Creating account...
+                    Saving...
                   </>
                 ) : (
-                  "Create Account"
+                  "Save"
                 )}
               </button>
             </div>
-
-            <p className="text-center text-sm text-base-content/60 mt-3">
-              Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-primary font-medium hover:underline"
-              >
-                Login
-              </Link>
-            </p>
           </form>
         </div>
       </div>

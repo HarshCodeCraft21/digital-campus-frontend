@@ -24,13 +24,13 @@ const SearchInput = ({ placeholder = "Search Courses..." }) => (
   </div>
 );
 
-const AuthButtons = ({ isAuthenticated, closeMenu }) => (
+const AuthButtons = ({ isAuthenticated, closeMenu, userValue }) => (
   isAuthenticated ? (
     <div className="avatar">
       <div className="ring-blue-500 ring-offset-base-100 w-8 rounded-full ring-1 ring-offset-3">
         <Link to="/profile" onClick={closeMenu} className="flex justify-center items-center">
           <img
-            src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp"
+            src={userValue ? userValue.profileUrl : "https://img.daisyui.com/images/profile/demo/spiderperson@192.webp"}
             title="profile"
             alt="profile"
           />
@@ -76,7 +76,7 @@ export const Navbar = () => {
   }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
-  const { isAuthenticated } = useContext(UserContext);
+  const { isAuthenticated, userValue } = useContext(UserContext);
   return (
     <nav className="navbar px-4 py-4 shadow-md flex items-center justify-between bg-base-100 relative">
 
@@ -110,7 +110,7 @@ export const Navbar = () => {
             Create Course <Plus />
           </button>
         )}
-        <AuthButtons isAuthenticated={isAuthenticated} closeMenu={closeMenu} />
+        <AuthButtons isAuthenticated={isAuthenticated} userValue={userValue} closeMenu={closeMenu} />
       </div>
 
       {/* Mobile Menu Button */}
@@ -143,7 +143,7 @@ export const Navbar = () => {
                 Create Course <Plus />
               </button>
             )}
-            <AuthButtons isAuthenticated={isAuthenticated} closeMenu={closeMenu} />
+            <AuthButtons isAuthenticated={isAuthenticated} userValue={userValue} closeMenu={closeMenu} />
           </div>
         </div>
       )}

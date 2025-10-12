@@ -12,6 +12,7 @@ import Mission from "./pages/Mission";
 import Course from "./pages/Course";
 import Profile from "./pages/Profile";
 import { UserContext } from "./context/UserContext.js";
+import UpdateProfile from "./pages/UpdateProfile.jsx";
 
 const App = () => {
   const { isAuthenticated } = useContext(UserContext);
@@ -35,6 +36,10 @@ const App = () => {
         <Route
           path="/profile"
           element={isAuthenticated ? <Profile /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/update-profile"
+          element={isAuthenticated ? <UpdateProfile /> : <Navigate to="/" replace />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

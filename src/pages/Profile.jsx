@@ -35,7 +35,7 @@ const Profile = () => {
           <div className="avatar">
             <div className="w-28 sm:w-32 md:w-36 rounded-full ring-4 ring-primary ring-offset-2 bg-base-100 shadow-lg">
               <img
-                src="https://api.dicebear.com/9.x/adventurer/svg?seed=John"
+                src={userValue ? userValue.profileUrl : "https://api.dicebear.com/9.x/adventurer/svg?seed=John"}
                 alt="Profile Avatar"
               />
             </div>
@@ -100,7 +100,7 @@ const Profile = () => {
                 <span>{userValue?.email || "example@gmail.com"}</span>
               </div>
 
-              <button className="btn btn-accent rounded-full w-full text-white flex items-center justify-center gap-2 mt-2">
+              <button className="btn btn-accent rounded-full w-full text-white flex items-center justify-center gap-2 mt-2" onClick={() => navigate("/update-profile")}>
                 <MessageSquare className="w-4 h-4" /> Update Profile
               </button>
 

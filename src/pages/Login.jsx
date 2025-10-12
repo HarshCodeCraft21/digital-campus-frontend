@@ -24,7 +24,7 @@ export default function Login() {
       toast.success(res.message);
       navigate("/");
     } catch (error) {
-      toast.error(error.message || "Something went wrong!");
+      toast.error("Invalid Credentials");
       console.error(error.message);
     } finally {
       setLoading(false);
