@@ -1,6 +1,6 @@
 import { useState, useContext, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, Upload, Loader2, Image as ImageIcon } from "lucide-react";
+import { GraduationCap, Loader2, Image as ImageIcon } from "lucide-react";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext.js";
 import { ProfileUpdate } from "../controllers/Auth.js";
@@ -22,13 +22,13 @@ export default function UpdateProfile() {
   const [preview, setPreview] = useState(userValue?.profileUrl || "");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Handle Input Change (memoized to avoid unnecessary re-renders)
+  // ✅ Handle Input Change
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  // ✅ Image upload handler with validation + cleanup
+  // ✅ Handle Image Upload
   const handleImageUpload = useCallback((e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -37,6 +37,7 @@ export default function UpdateProfile() {
       toast.error("Please upload a valid image file.");
       return;
     }
+
     if (file.size > 2 * 1024 * 1024) {
       toast.error("Image size must be under 2MB.");
       return;
@@ -47,6 +48,7 @@ export default function UpdateProfile() {
     setPreview(previewUrl);
   }, []);
 
+  // ✅ Cleanup object URLs
   useMemo(() => {
     return () => {
       if (preview && preview.startsWith("blob:")) URL.revokeObjectURL(preview);
@@ -60,16 +62,25 @@ export default function UpdateProfile() {
 
     try {
       const payload = new FormData();
-      Object.entries(formData).forEach(([key, value]) => payload.append(key, value));
+      Object.entries(formData).forEach(([key, value]) =>
+        payload.append(key, value)
+      );
       if (image) payload.append("profileUrl", image);
-      const res = await ProfileUpdate(payload);
-      setUserValue(res.userData);
 
+      const res = await ProfileUpdate(payload);
+      console.log("Profile update response:", res);
+
+      if (!res) {
+        toast.error("Profile update failed. Please try again.");
+        return;
+      }
+
+      setUserValue(res);
       toast.success("Profile updated successfully!");
       navigate("/");
       window.location.reload();
     } catch (err) {
-      console.error(err);
+      console.error("Update error:", err);
       toast.error(err?.message || "Something went wrong!");
     } finally {
       setLoading(false);
@@ -77,7 +88,7 @@ export default function UpdateProfile() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4 py-10">
+    <div className="min-h-screen bg-base-200 flex justify-center py-10 px-4 overflow-y-auto">
       <div className="card w-full max-w-2xl bg-base-100 shadow-xl">
         <div className="card-body">
           {/* Header */}
@@ -110,19 +121,16 @@ export default function UpdateProfile() {
                   )}
                 </div>
               </div>
-              <label
-                htmlFor="image"
-                className="text-sm text-primary cursor-pointer hover:underline"
-              >
+
+              <label className="text-sm text-primary cursor-pointer hover:underline relative inline-block">
                 Upload Profile Picture
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
               </label>
-              <input
-                id="image"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageUpload}
-              />
             </div>
 
             {/* Input Fields */}
