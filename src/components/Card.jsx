@@ -4,7 +4,7 @@ export const Card = ({
     id,
     title = "Title Not Found",
     desc = "No Description",
-    src = src || NoCourseFound,
+    src = NoCourseFound,
     price = "0",
     creatorName = "No User",
 }) => {

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -16,6 +16,9 @@ import UpdateProfile from "./pages/UpdateProfile.jsx";
 
 const App = () => {
   const { isAuthenticated } = useContext(UserContext);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  },[])
   return (
     <BrowserRouter>
       <Navbar />

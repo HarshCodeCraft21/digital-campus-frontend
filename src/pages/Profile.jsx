@@ -6,6 +6,7 @@ import {
   Play,
   MessageSquare,
   BookOpen,
+  Plus,
 } from "lucide-react";
 import { UserContext } from "../context/UserContext.js";
 import Banner from '../assets/Banner.PNG';
@@ -19,7 +20,10 @@ const Profile = () => {
     setIsAuthenticated(false);
     navigate("/");
   };
-
+  const updateProfile = () => {
+    navigate("/update-profile");
+    window.scrollTo(0,0);
+  }
   return (
     <div className="min-h-screen bg-base-200 flex flex-col items-center py-8 px-4">
       {/* Cover Section */}
@@ -99,12 +103,18 @@ const Profile = () => {
                 <span>{userValue?.email || "example@gmail.com"}</span>
               </div>
 
-              <button className="btn btn-accent rounded-full w-full text-white flex items-center justify-center gap-2 mt-2" onClick={() => navigate("/update-profile")}>
+              <button className="btn btn-accent rounded-full w-full text-white flex items-center justify-center gap-2 mt-2" onClick={updateProfile}>
                 <MessageSquare className="w-4 h-4" /> Update Profile
               </button>
 
               <div className="mt-4 text-sm text-base-content/70">
-                Enrolled Students (1200)
+                {
+                  userValue?.role === "student" ? (
+                    <p>Total Course you take : 12</p>
+                  ) : (
+                    <p>Total Students enrolled : 1200</p>
+                  )
+                }
               </div>
             </div>
           </div>
@@ -138,7 +148,13 @@ const Profile = () => {
               {/* Header */}
               <div className="w-full mb-3">
                 <h3 className="card-title text-2xl font-bold text-primary">
-                  Registered Courses
+                  {
+                    userValue?.role === "student" ? (
+                      <p>Register Courses</p>
+                    ) : (
+                      <p>Create Courses</p>
+                    )
+                  }
                 </h3>
                 <p className="text-base-content/70">
                   View and manage your enrolled courses
@@ -150,8 +166,7 @@ const Profile = () => {
                 <div className="stats shadow bg-base-200 rounded-xl">
                   <div className="stat place-items-center">
                     <div className="stat-title">Total Courses</div>
-                    <div className="stat-value text-primary">12</div>
-                    <div className="stat-desc">3 new this month</div>
+                    <div className="stat-value text-primary">0</div>
                   </div>
                 </div>
               </div>
@@ -168,13 +183,9 @@ const Profile = () => {
                       <p className="font-medium text-base-content">
                         React for Beginners
                       </p>
-                      <p className="text-sm text-base-content/60">
-                        Progress: 65%
-                      </p>
                     </div>
-                    <button className="btn btn-xs btn-primary">Continue</button>
+                    <button className="btn btn-xs btn-primary">Show</button>
                   </div>
-
                   {/* Placeholder */}
                   <div className="flex items-center justify-center h-full text-base-content/50 italic">
                     No more courses added yet
@@ -183,15 +194,29 @@ const Profile = () => {
               </div>
 
               {/* CTA */}
-              <Link
-                to="/courses"
-                onClick={() => window.scrollTo(0, 0)}
-                className="w-full mt-6"
-              >
-                <button className="btn btn-primary w-full rounded-full flex items-center justify-center gap-2">
-                  <BookOpen className="w-4 h-4" /> Browse All Courses
-                </button>
-              </Link>
+              {
+                userValue?.role === "student" ? (
+                  <Link
+                    to="/courses"
+                    onClick={() => window.scrollTo(0, 0)}
+                    className="w-full mt-6"
+                  >
+                    <button className="btn btn-primary w-full rounded-full flex items-center justify-center gap-2">
+                      <BookOpen className="w-4 h-4" /> Browse All Courses
+                    </button>
+                  </Link>
+                ) : (
+                  <Link
+                    to="/"
+                    onClick={() => window.scrollTo(0, 0)}
+                    className="w-full mt-6"
+                  >
+                    <button className="btn btn-primary w-full rounded-full flex items-center justify-center gap-2">
+                      Create Course<Plus className="w-4 h-4" />
+                    </button>
+                  </Link>
+                )
+              }
             </div>
           </div>
         </div>

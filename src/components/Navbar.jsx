@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useState, useRef, useContext, useCallback, memo } from "react";
 import { GraduationCap, Menu, X, Search, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
@@ -10,7 +10,7 @@ const navLinks = [
   { id: 4, label: "Our Mission", path: "/mission" },
 ];
 
-const SearchInput = ({ placeholder = "Search Courses..." }) => (
+const SearchInput = memo(({ placeholder = "Search Courses..." }) => (
   <div className="relative w-full">
     <Search
       className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none z-10"
@@ -20,24 +20,34 @@ const SearchInput = ({ placeholder = "Search Courses..." }) => (
       type="text"
       placeholder={placeholder}
       className="input border-amber-500 input-sm md:input-md pl-10 w-full focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-xl"
+      aria-label={placeholder}
     />
   </div>
-);
+));
 
-const AuthButtons = ({ isAuthenticated, closeMenu, userValue }) => (
-  isAuthenticated ? (
-    <div className="avatar">
-      <div className="ring-blue-500 ring-offset-base-100 w-8 rounded-full ring-1 ring-offset-3">
-        <Link to="/profile" onClick={closeMenu} className="flex justify-center items-center">
-          <img
-            src={userValue?.profileUrl}
-            title="profile"
-            alt="profile"
-          />
-        </Link>
+const AuthButtons = memo(({ isAuthenticated, closeMenu, userValue }) => {
+  if (isAuthenticated) {
+    return (
+      <div className="avatar">
+        <div className="ring-blue-500 ring-offset-base-100 w-8 h-8 rounded-full ring-1 ring-offset-3">
+          <Link
+            to="/profile"
+            onClick={closeMenu}
+            className="flex justify-center items-center"
+          >
+            <img
+              src={userValue?.profileUrl}
+              alt="Profile"
+              loading="lazy"
+              className="rounded-full"
+            />
+          </Link>
+        </div>
       </div>
-    </div>
-  ) : (
+    );
+  }
+
+  return (
     <>
       <Link
         to="/login"
@@ -54,32 +64,33 @@ const AuthButtons = ({ isAuthenticated, closeMenu, userValue }) => (
         Sign Up
       </Link>
     </>
-  )
-);
+  );
+});
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [role, setRole] = useState("student");
-  const menuRef = useRef();
+  const menuRef = useRef(null);
+  const { isAuthenticated, userValue } = useContext(UserContext);
+  const role = userValue?.role;
+
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
+    if (!menuOpen) return;
+
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
       }
     };
-    if (menuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+
+    document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menuOpen]);
 
-  const closeMenu = () => setMenuOpen(false);
-  const { isAuthenticated, userValue } = useContext(UserContext);
   return (
     <nav className="navbar px-4 py-4 shadow-md flex items-center justify-between bg-base-100 relative">
-
       {/* Logo */}
       <Link to="/" className="flex items-center gap-2 flex-1">
         <GraduationCap size={48} className="text-primary" />
@@ -105,16 +116,25 @@ export const Navbar = () => {
 
       {/* Auth Buttons (Desktop) */}
       <div className="hidden md:flex items-center gap-2">
-        {role === "teacher" && (
+        {role === "teacher" && isAuthenticated && (
           <button className="btn bg-blue-500 text-white rounded-xl">
             Create Course <Plus />
           </button>
-        )}
-        <AuthButtons isAuthenticated={isAuthenticated} userValue={userValue} closeMenu={closeMenu} />
+        )
+        }
+        <AuthButtons
+          isAuthenticated={isAuthenticated}
+          userValue={userValue}
+          closeMenu={closeMenu}
+        />
       </div>
 
       {/* Mobile Menu Button */}
-      <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+      <button
+        className="md:hidden"
+        onClick={() => setMenuOpen((prev) => !prev)}
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+      >
         {menuOpen ? <X size={28} /> : <Menu size={28} />}
       </button>
 
@@ -122,7 +142,7 @@ export const Navbar = () => {
       {menuOpen && (
         <div
           ref={menuRef}
-          className="absolute top-16 left-0 w-full bg-base-100 shadow-md p-4 flex flex-col gap-4 z-50 md:hidden"
+          className="absolute top-16 left-0 w-full bg-base-100 shadow-md p-4 flex flex-col gap-4 z-50 md:hidden animate-fadeIn"
         >
           {navLinks.map(({ id, label, path }) => (
             <Link
@@ -138,12 +158,16 @@ export const Navbar = () => {
           <SearchInput />
 
           <div className="flex gap-4 mt-2">
-            {role === "teacher" && (
+            {role === "teacher" && isAuthenticated && (
               <button className="btn bg-blue-500 text-white rounded-xl">
                 Create Course <Plus />
               </button>
             )}
-            <AuthButtons isAuthenticated={isAuthenticated} userValue={userValue} closeMenu={closeMenu} />
+            <AuthButtons
+              isAuthenticated={isAuthenticated}
+              userValue={userValue}
+              closeMenu={closeMenu}
+            />
           </div>
         </div>
       )}

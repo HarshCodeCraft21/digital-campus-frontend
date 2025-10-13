@@ -1,6 +1,11 @@
-import { useState, useContext, useCallback, useMemo } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, Loader2, Image as ImageIcon } from "lucide-react";
+import {
+  GraduationCap,
+  Loader2,
+  Image as ImageIcon,
+  ArrowLeft,
+} from "lucide-react";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext.js";
 import { ProfileUpdate } from "../controllers/Auth.js";
@@ -17,18 +22,18 @@ export default function UpdateProfile() {
     gender: userValue?.gender || "",
   });
 
-  // ✅ Image state
+  // ✅ Image States
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(userValue?.profileUrl || "");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Handle Input Change
+  // ✅ Handle input changes
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  // ✅ Handle Image Upload
+  // ✅ Handle image upload
   const handleImageUpload = useCallback((e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -44,14 +49,13 @@ export default function UpdateProfile() {
     }
 
     setImage(file);
-    const previewUrl = URL.createObjectURL(file);
-    setPreview(previewUrl);
+    setPreview(URL.createObjectURL(file));
   }, []);
 
-  // ✅ Cleanup object URLs
-  useMemo(() => {
+  // ✅ Cleanup image URL on unmount
+  useEffect(() => {
     return () => {
-      if (preview && preview.startsWith("blob:")) URL.revokeObjectURL(preview);
+      if (preview?.startsWith("blob:")) URL.revokeObjectURL(preview);
     };
   }, [preview]);
 
@@ -68,16 +72,12 @@ export default function UpdateProfile() {
       if (image) payload.append("profileUrl", image);
 
       const res = await ProfileUpdate(payload);
-      console.log("Profile update response:", res);
-
-      if (!res) {
-        toast.error("Profile update failed. Please try again.");
-        return;
-      }
+      if (!res) throw new Error("Profile update failed.");
 
       setUserValue(res);
       toast.success("Profile updated successfully!");
       navigate("/");
+      window.scrollTo(0, 0);
       window.location.reload();
     } catch (err) {
       console.error("Update error:", err);
@@ -87,8 +87,13 @@ export default function UpdateProfile() {
     }
   };
 
+  const handleBack = () => {
+    navigate("/profile");
+    window.scrollTo(0, 0);
+  };
+
   return (
-    <div className="min-h-screen bg-base-200 flex justify-center py-10 px-4 overflow-y-auto">
+    <main className="min-h-screen bg-base-200 flex justify-center py-10 px-4 overflow-y-auto">
       <div className="card w-full max-w-2xl bg-base-100 shadow-xl">
         <div className="card-body">
           {/* Header */}
@@ -99,11 +104,13 @@ export default function UpdateProfile() {
             <h2 className="text-3xl font-bold mt-3 text-base-content">
               Update Profile
             </h2>
-            <p className="text-base-content/60">One Campus Infinite Learning</p>
+            <p className="text-base-content/60">
+              One Campus, Infinite Learning
+            </p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Profile Image */}
             <div className="flex flex-col items-center gap-3">
               <div className="avatar">
@@ -113,6 +120,7 @@ export default function UpdateProfile() {
                       src={preview}
                       alt="Profile Preview"
                       className="object-cover w-full h-full"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="flex items-center justify-center bg-base-300 w-full h-full text-base-content/40">
@@ -173,6 +181,7 @@ export default function UpdateProfile() {
                 </div>
               ))}
 
+              {/* Gender Dropdown */}
               <div className="md:col-span-2">
                 <label className="label">
                   <span className="label-text font-medium">Gender</span>
@@ -191,24 +200,35 @@ export default function UpdateProfile() {
               </div>
             </div>
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn btn-primary w-full font-bold"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin w-5 h-5 mr-2" />
-                  Saving...
-                </>
-              ) : (
-                "Save"
-              )}
-            </button>
+            {/* Buttons */}
+            <div className="flex w-full items-center justify-center gap-3 mt-6 flex-wrap">
+              <button
+                type="button"
+                onClick={handleBack}
+                className="btn btn-ghost font-semibold flex items-center gap-1"
+              >
+                <ArrowLeft size={16} />
+                Back
+              </button>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn btn-primary font-bold flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin w-5 h-5" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save"
+                )}
+              </button>
+            </div>
           </form>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

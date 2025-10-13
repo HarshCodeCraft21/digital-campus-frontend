@@ -19,7 +19,7 @@ const UserContextProvider = ({ children }) => {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true,
                 });
-                setUserValue(response.data.userData);
+                return setUserValue(response.data.userData);
             } catch (error) {
                 console.error("Error fetching user details:", error);
                 setIsAuthenticated(false);
