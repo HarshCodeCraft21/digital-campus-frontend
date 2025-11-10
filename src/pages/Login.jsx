@@ -19,6 +19,8 @@ export default function Login() {
     try {
       const res = await LoginController(formData);
       localStorage.setItem("JwtToken", res.JwtToken);
+      localStorage.setItem("userData",JSON.stringify(res.userData));
+      
       setIsAuthenticated(true);
       setUserValue(res.userData);
       toast.success(res.message);

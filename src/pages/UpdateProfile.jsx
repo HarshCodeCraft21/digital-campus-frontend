@@ -14,7 +14,6 @@ export default function UpdateProfile() {
   const { userValue, setUserValue } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // ✅ Form State
   const [formData, setFormData] = useState({
     fullName: userValue?.fullName || "",
     email: userValue?.email || "",
@@ -22,18 +21,15 @@ export default function UpdateProfile() {
     gender: userValue?.gender || "",
   });
 
-  // ✅ Image States
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(userValue?.profileUrl || "");
   const [loading, setLoading] = useState(false);
 
-  // ✅ Handle input changes
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  // ✅ Handle image upload
   const handleImageUpload = useCallback((e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -52,14 +48,12 @@ export default function UpdateProfile() {
     setPreview(URL.createObjectURL(file));
   }, []);
 
-  // ✅ Cleanup image URL on unmount
   useEffect(() => {
     return () => {
       if (preview?.startsWith("blob:")) URL.revokeObjectURL(preview);
     };
   }, [preview]);
 
-  // ✅ Submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

@@ -1,34 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { UserContext } from "./UserContext";
-import { getUserDetails } from "../API/api.js";
-import axios from "axios";
 
 const UserContextProvider = ({ children }) => {
-    const [userValue, setUserValue] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userValue, setUserValue] = useState(() => {
+        const data = localStorage.getItem("userData");
+        return data ? JSON.parse(data) : null;
+    });
 
-    useEffect(() => {
-        const token = localStorage.getItem("JwtToken");
-        setIsAuthenticated(!!token);
-
-        if (!token) return; // early exit if no token
-
-        const fetchUserDetails = async () => {
-            try {
-                const response = await axios.get(getUserDetails, {
-                    headers: { Authorization: `Bearer ${token}` },
-                    withCredentials: true,
-                });
-                return setUserValue(response.data.userData);
-            } catch (error) {
-                console.error("Error fetching user details:", error);
-                setIsAuthenticated(false);
-                setUserValue(null);
-            }
-        };
-
-        fetchUserDetails();
-    }, []);
+    const [isAuthenticated, setIsAuthenticated] = useState(() =>
+        Boolean(localStorage.getItem("JwtToken"))
+    );
 
     return (
         <UserContext.Provider
