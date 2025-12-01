@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useContext, useCallback, memo } from "react";
 import { GraduationCap, Menu, X, Search, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext.js";
 
 const navLinks = [
@@ -72,9 +72,8 @@ export const Navbar = () => {
   const menuRef = useRef(null);
   const { isAuthenticated, userValue } = useContext(UserContext);
   const role = userValue?.role;
-
   const closeMenu = useCallback(() => setMenuOpen(false), []);
-
+  const navigate = useNavigate();
   // Close mobile menu when clicking outside
   useEffect(() => {
     if (!menuOpen) return;
@@ -117,7 +116,7 @@ export const Navbar = () => {
       {/* Auth Buttons (Desktop) */}
       <div className="hidden md:flex items-center gap-2">
         {role === "teacher" && isAuthenticated && (
-          <button className="btn bg-blue-500 text-white rounded-xl">
+          <button className="btn bg-blue-500 text-white rounded-xl" onClick={() => navigate("create-course")}>
             Create Course <Plus />
           </button>
         )
@@ -159,7 +158,7 @@ export const Navbar = () => {
 
           <div className="flex gap-4 mt-2">
             {role === "teacher" && isAuthenticated && (
-              <button className="btn bg-blue-500 text-white rounded-xl">
+              <button className="btn bg-blue-500 text-white rounded-xl" onClick={()=>navigate("create-course")}>
                 Create Course <Plus />
               </button>
             )}

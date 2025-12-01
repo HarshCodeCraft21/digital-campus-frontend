@@ -1,4 +1,5 @@
-const URL = "https://digital-campus-3nsa.onrender.com";
+// const URL = "https://digital-campus-3nsa.onrender.com";
+const URL = "https://digital-campus-backend-oce3.onrender.com"
 
 export const registerAPI = `${URL}/api/users/register`;
 export const loginAPI = `${URL}/api/users/login`;

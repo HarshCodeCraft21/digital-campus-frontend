@@ -68,6 +68,7 @@ export default function UpdateProfile() {
       const res = await ProfileUpdate(payload);
       if (!res) throw new Error("Profile update failed.");
 
+      localStorage.setItem("userData",JSON.stringify(res))
       setUserValue(res);
       toast.success("Profile updated successfully!");
       navigate("/");

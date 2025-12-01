@@ -1,9 +1,10 @@
+import "./App.css";
 import { useContext, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { UserContext } from "./context/UserContext.js";
-
+import CreateCourse from "./pages/CreateCourse.jsx";
 // ✅ Lazy load all pages
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -49,6 +50,10 @@ const App = () => {
           <Route
             path="/update-profile"
             element={isAuthenticated ? <UpdateProfile /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/create-course"
+            element={isAuthenticated ? <CreateCourse /> : <Navigate to="/" replace />}
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
