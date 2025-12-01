@@ -87,7 +87,10 @@ export const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menuOpen]);
-
+  const handleCreateButton = () => {
+    navigate("create-course");
+    setMenuOpen(false);
+  }
   return (
     <nav className="navbar px-4 py-4 shadow-md flex items-center justify-between bg-base-100 relative">
       {/* Logo */}
@@ -158,7 +161,7 @@ export const Navbar = () => {
 
           <div className="flex gap-4 mt-2">
             {role === "teacher" && isAuthenticated && (
-              <button className="btn bg-blue-500 text-white rounded-xl" onClick={()=>navigate("create-course")}>
+              <button className="btn bg-blue-500 text-white rounded-xl" onClick={handleCreateButton}>
                 Create Course <Plus />
               </button>
             )}
