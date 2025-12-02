@@ -5,7 +5,8 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { UserContext } from "./context/UserContext.js";
 import CreateCourse from "./pages/CreateCourse.jsx";
-// ✅ Lazy load all pages
+import DisplaySingleCourse from "./pages/DisplaySingleCourse.jsx";
+
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/SignUp"));
@@ -54,6 +55,10 @@ const App = () => {
           <Route
             path="/create-course"
             element={isAuthenticated ? <CreateCourse /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/course/:id"
+            element={isAuthenticated ? <DisplaySingleCourse /> : <Navigate to="/login" replace />}
           />
           <Route path="*" element={<NotFound />} />
         </Routes>

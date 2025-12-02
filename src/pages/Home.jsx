@@ -20,14 +20,6 @@ export default function Home() {
       image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=600&fit=crop",
     },
   ];
-
-  const courses = [
-    { id: 1, title: "React for Beginners", instructor: "John Doe", price: "2,999", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=600&fit=crop" },
-    { id: 2, title: "Advanced JavaScript", instructor: "Jane Smith", price: "3,920", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop" },
-    { id: 3, title: "Python Programming", instructor: "Alice Johnson", price: "1,999", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop" },
-    { id: 4, title: "Fullstack Development", instructor: "Bob Brown", price: "2,499", image: "https://source.unsplash.com/400x300/?fullstack" },
-  ];
-
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -108,15 +100,7 @@ export default function Home() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map(course => (
-            <Card
-              key={course.id}
-              src={course.image}
-              title={course.title}
-              creatorName={course.instructor}
-              price={course.price}
-            />
-          ))}
+         <Card />
         </div>
       </section>
 

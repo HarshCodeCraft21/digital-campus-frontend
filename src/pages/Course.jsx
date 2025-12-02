@@ -1,7 +1,18 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { Card } from "../components/Card";
+import { getCourse } from "../controllers/Course";
 
 const Course = () => {
+    useEffect(() => {
+        const fetchAllCourses = async () => {
+            try {
+                await getCourse();
+            } catch (error) {
+                console.error("something went wrong to fetch data", error.message);
+            }
+        }
+        fetchAllCourses();
+    }, [])
     return (
         <main className="min-h-screen bg-base-200 flex flex-col">
             {/* ✅ Hero Section */}

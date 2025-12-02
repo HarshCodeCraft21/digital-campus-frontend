@@ -4,10 +4,13 @@ import './index.css'
 import App from './App.jsx'
 import { ToastContainer } from 'react-toastify'
 import UserContextProvider from './context/UserContextProvider.jsx'
+import CourseContextProvider from './context/CourseContext.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <UserContextProvider>
-      <App />
+      <CourseContextProvider>
+        <App />
+      </CourseContextProvider>
     </UserContextProvider>
     <ToastContainer
       position="top-right"
