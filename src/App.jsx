@@ -20,11 +20,11 @@ const UpdateProfile = lazy(() => import("./pages/UpdateProfile.jsx"));
 
 const App = () => {
   const { isAuthenticated } = useContext(UserContext);
-  const { fetchCourses } = useCourse();
+  const { fetchAllCourses } = useCourse();
   useEffect(() => {
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     window.scrollTo(0, 0);
-    (async () => { await fetchCourses() })()
+    (async () => { await fetchAllCourses() })()
   }, []);
 
   return (

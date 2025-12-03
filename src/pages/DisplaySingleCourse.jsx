@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useCourse } from "../context/CourseContext"
 import { Users, Lock, CheckCircle2, CheckCircleIcon, CheckCircle2Icon, Play } from 'lucide-react';
-import { convertToEmbedUrl } from "../utility/EmbadedURLForYoutube.js"
 import Checkout from "../components/Checkout.jsx";
 import { UserContext } from '../context/UserContext.js';
 
@@ -10,7 +9,6 @@ const DisplaySingleCourse = () => {
   const { id } = useParams();
   const { course } = useCourse();
   const courses = course.find(e => id === e._id);
-  const youtubeURL = convertToEmbedUrl(courses.introURL);
   const { userValue } = useContext(UserContext);
 
   return (
@@ -28,9 +26,8 @@ const DisplaySingleCourse = () => {
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
-                  <span>1200 students</span>
+                  <span>{courses.enrollments.length} students</span>
                 </div>
-                <span>By Harsh Jain</span>
               </div>
             </div>
           </div>
@@ -43,12 +40,11 @@ const DisplaySingleCourse = () => {
               <div className="card-body">
                 <h2 className="card-title">Course Preview</h2>
                 <div className="aspect-video rounded-lg overflow-hidden bg-base-200">
-                  <iframe
-                    src={youtubeURL}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                  <video width="640" height="360" controls>
+                    <source src={courses.introURL} type="video/mp4"></source>
+                    Your browser does not support the video tag.
+                  </video>
+
                 </div>
               </div>
             </div>
@@ -60,7 +56,7 @@ const DisplaySingleCourse = () => {
                     {
                       courses.enrollments.includes(userValue._id) ? (
                         <div className="flex items-center gap-3">
-                          <CheckCircle2Icon className="h-5 w-5 opacity-60"/>
+                          <CheckCircle2Icon className="h-5 w-5 opacity-60" />
                           <Link to={courses.driveLink} className='text-blue-500 underline'>{`click here for you ${courses.title} course.`}</Link>
                         </div>
                       ) : (
