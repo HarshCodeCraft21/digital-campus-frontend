@@ -4,13 +4,14 @@ import { useCourse } from "../context/CourseContext"
 import { Users, Lock, CheckCircle2, CheckCircleIcon, CheckCircle2Icon, Play } from 'lucide-react';
 import Checkout from "../components/Checkout.jsx";
 import { UserContext } from '../context/UserContext.js';
+import { convertToEmbedUrl } from '../utility/EmbadedURLForYoutube.js';
 
 const DisplaySingleCourse = () => {
   const { id } = useParams();
   const { course } = useCourse();
   const courses = course.find(e => id === e._id);
   const { userValue } = useContext(UserContext);
-
+  const URL = convertToEmbedUrl(courses.introLink);
   return (
     <div className='min-h-screen'>
       <div
@@ -39,11 +40,15 @@ const DisplaySingleCourse = () => {
             <div className="card bg-base-100 shadow">
               <div className="card-body">
                 <h2 className="card-title">Course Preview</h2>
-                <div className="aspect-video rounded-lg overflow-hidden bg-base-200">
-                  <video width="640" height="360" controls>
-                    <source src={courses.introURL} type="video/mp4"></source>
-                    Your browser does not support the video tag.
-                  </video>
+                <div className="aspect-video rounded-lg overflow-hidden bg-base-200 flex items-center justify-center flex-col">
+                  <iframe
+                    src={URL}
+                    width="640"
+                    height="360"
+                    allow="autoplay"
+                  >
+                  </iframe>
+                  <span className='text-white text-xl'>Something Went Wrong for preview</span>
 
                 </div>
               </div>
@@ -57,7 +62,13 @@ const DisplaySingleCourse = () => {
                       courses.enrollments.includes(userValue._id) ? (
                         <div className="flex items-center gap-3">
                           <CheckCircle2Icon className="h-5 w-5 opacity-60" />
-                          <Link to={courses.driveLink} className='text-blue-500 underline'>{`click here for you ${courses.title} course.`}</Link>
+                          <a
+                            href={convertToEmbedUrl(courses.driveLink)}
+                            target="_blank"
+                            className="text-blue-500 underline"
+                          >
+                            {`Click here for your ${courses.title} course.`}
+                          </a>
                         </div>
                       ) : (
                         <div className="flex items-center gap-3">

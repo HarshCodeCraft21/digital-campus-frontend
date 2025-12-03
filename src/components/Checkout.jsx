@@ -10,7 +10,7 @@ const Checkout = ({ courseId }) => {
   const { userValue } = useContext(UserContext);
 
   const [isEnroll, setIsEnroll] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const findCourse = course.find(crs => courseId === crs._id);
 
@@ -109,7 +109,6 @@ const Checkout = ({ courseId }) => {
     }
   };
 
-  // ✔ Conditions
   const isTeacher = userValue?.role === "teacher";
   const disabled = isEnroll || isTeacher || loading;
 
