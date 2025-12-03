@@ -135,7 +135,7 @@ const Profile = () => {
 
               <div className="mt-4 text-sm text-base-content/70">
                 {userValue?.role === "student" ? (
-                  <p>Total Courses Taken: 12</p>
+                  <p>Total Courses Taken: 0</p>
                 ) : (
                   <p>Total Students Enrolled: 1200</p>
                 )}
@@ -146,14 +146,8 @@ const Profile = () => {
           {/* Video Card */}
           <div className="card bg-base-100 border border-base-300 shadow-sm hover:shadow-lg transition-all duration-300">
             <figure className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=600&q=80"
-                alt="Video"
-                className="w-full h-40 sm:h-48 object-cover"
-              />
-              <button className="btn btn-circle btn-primary absolute inset-0 m-auto opacity-90 hover:opacity-100">
-                <Play className="w-5 h-5" />
-              </button>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/JYjtfADAHFA" title="YouTube video player" frameborder="0" allowfullscreen>
+              </iframe>
             </figure>
             <div className="card-body text-center sm:text-left">
               <h3 className="card-title text-lg font-bold">Introduction</h3>
