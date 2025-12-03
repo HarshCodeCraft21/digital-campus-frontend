@@ -6,6 +6,7 @@ import { Footer } from "./components/Footer";
 import { UserContext } from "./context/UserContext.js";
 import CreateCourse from "./pages/CreateCourse.jsx";
 import DisplaySingleCourse from "./pages/DisplaySingleCourse.jsx";
+import { useCourse } from "./context/CourseContext.jsx";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
@@ -19,10 +20,11 @@ const UpdateProfile = lazy(() => import("./pages/UpdateProfile.jsx"));
 
 const App = () => {
   const { isAuthenticated } = useContext(UserContext);
-
+  const { fetchCourses } = useCourse();
   useEffect(() => {
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     window.scrollTo(0, 0);
+    (async () => { await fetchCourses() })()
   }, []);
 
   return (
